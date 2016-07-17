@@ -7,3 +7,13 @@
 -- these lines here.
 
 
+CREATE TABLE player(
+  ID SERIAL PRIMARY KEY  NOT NULL,
+  NAME  TEXT             NOT NULL
+);
+
+CREATE TABLE matches(
+  ID SERIAL PRIMARY KEY  NOT NULL,
+  WINNERID INT references player(ID)  NOT NULL,
+  LOSERID INT references player(ID)  NOT NULL
+);
