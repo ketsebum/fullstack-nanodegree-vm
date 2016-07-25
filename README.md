@@ -41,7 +41,7 @@ tournament.py handles all of the interactions with the database, in several simp
 - Validates the project
 
 ##To run the program
-Please run the tournament_test.py file to see the results. This should printout the following into your terminal:
+Navigate to the tournament.sql file located in /vagrant/tournament/ directory. Then please run `psql - f tournament.sql`, which will create the database for you. Then please run the tournament_test.py file to see the results. This should printout the following into your terminal:
 ```text
 1. countPlayers() returns 0 after initial deletePlayers() execution.
 2. countPlayers() returns 1 after one player is registered.
