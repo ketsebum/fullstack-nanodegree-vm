@@ -25,15 +25,19 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+#Base route to see the application
 @app.route("/")
 def showIndex():
     categories = session.query(Category).all()
     items = session.query(CatalogItem).all()
+
+    #Have less information for non-logged in users affects displayed information
     if 'username' not in login_session:
       return render_template('index.html', categories=categories, items=items)
     user = getUserInfo(getUserID(login_session.get('email')))
     return render_template('index.html', categories=categories, items=items, user=user, username=login_session.get('username'))
 
+#login route
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -41,50 +45,66 @@ def showLogin():
     login_session['state'] = state
     return render_template('login.html', STATE=state)
 
+#Add item to our catalog
+#Needs to be authenticated
 @app.route('/additem', methods=['GET','POST'])
 def showAddItem():
+    #If not logged in redirect to login
     if 'username' not in login_session:
       return redirect('/login')
     categories = session.query(Category).all()
+
+    #Discriminate between showing the add page or allowing user to add an item
     if request.method == 'GET':
         return render_template('additem.html', categories=categories, username=login_session['username'])
     if request.method == 'POST':
         category = session.query(Category).filter_by(name=request.form['category']).one()
         user = session.query(User).filter_by(id=login_session.get("user_id")).one()
+
+        #Creating new catalog item
         catalogItem = CatalogItem(name=request.form['title'], description=request.form['description'],
          category=category, user=user)
         session.add(catalogItem)
         session.commit()
         return "Success!"
 
+#This is the success route
 @app.route('/success')
 def showSuccess():
+    #If not logged in redirect to login
     if 'username' not in login_session:
       return redirect('/login')
     return render_template('success.html', username=login_session['username'])
 
+#Show specific category and their catalog items
 @app.route("/category/<int:category_id>/")
 def showCategoryItems(category_id):
     categories = session.query(Category).all()
     items = session.query(CatalogItem).filter_by(category_id=category_id).all()
     category = session.query(Category).filter_by(id=category_id).one()
+
+    #Have less information for non-logged in users affects displayed information
     if 'username' not in login_session:
       return render_template('category.html', categories=categories, items=items, category=category)
     user = getUserInfo(getUserID(login_session.get('email')))
     return render_template('category.html', categories=categories, items=items, user=user, username=login_session.get('username'), category=category)
 
-
+#Show specific catalog item details
 @app.route("/catalogItem/<int:catalog_id>/")
 def showItemDetails(catalog_id):
     catalogItem = session.query(CatalogItem).filter_by(id=catalog_id).one()
     categories = session.query(Category).all()
+
+    #Have less information for non-logged in users affects displayed information
     if 'email' in login_session:
         user = getUserInfo(getUserID(login_session.get('email')))
         return render_template('itemdetails.html', item=catalogItem, user=user, categories=categories, username=login_session.get('username'))
     return render_template('itemdetails.html', item=catalogItem, categories=categories)
 
+#Edit specific catalog item
 @app.route("/editItem/<int:catalog_id>/", methods=['GET','POST'])
 def editCatalogItem(catalog_id):
+    #If not logged in redirect to login
     if 'username' not in login_session:
         return redirect('/login')
     catalogItem = session.query(CatalogItem).filter_by(id=catalog_id).one()
@@ -92,6 +112,8 @@ def editCatalogItem(catalog_id):
     if catalogItem.user_id != user.id:
         return redirect('/')
     categories = session.query(Category).all()
+
+    #Discriminate between showing the edit page or allowing user to edit an item
     if request.method == 'GET':
         return render_template('edititem.html', item=catalogItem, categories=categories, username=login_session.get('username'))
     if request.method == 'POST':
@@ -100,17 +122,20 @@ def editCatalogItem(catalog_id):
         category = session.query(Category).filter_by(name=request.form['category']).one()
         catalogItem.category = category
         session.commit()
-        print "yes"
-        return "WOA!"
+        return "Success"
 
+#Delete specific catalog
 @app.route("/catalogItem/<int:catalog_id>/delete", methods=['GET','DELETE'])
 def deleteCatalogItem(catalog_id):
+    #If not logged in return not logged in
     if 'username' not in login_session:
         return "Not Logged In"
     catalogItem = session.query(CatalogItem).filter_by(id=catalog_id).one()
     user = getUserInfo(getUserID(login_session.get('email')))
     if catalogItem.user_id != user.id:
         return "Not Able to Delete"
+
+    #Discriminate between showing the delete page or allowing user to delete an item
     if request.method == 'GET':
         return render_template('delete.html', item=catalogItem, username=login_session.get('username'))
     if request.method == 'DELETE':
@@ -118,6 +143,7 @@ def deleteCatalogItem(catalog_id):
         session.commit()
         return "Success"
 
+#Catalog JSON route to get catalog json
 @app.route("/catalog.json")
 def catalogJson():
     catalog = session.query(CatalogItem).all()
@@ -213,6 +239,7 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    #Check if the user exists, if they don't create a new one
     user_id = getUserID(login_session['email'])
     if not user_id:
         user_id = createUser(login_session)
@@ -238,6 +265,7 @@ def gdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
+    #Delete the left over credentials in our python code
     if result['status'] == '200':
 	del login_session['credentials']
     	del login_session['gplus_id']
