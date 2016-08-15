@@ -26,15 +26,25 @@ databaseSeed.py does the work of seeding the tables with data.
 
 Here is a list of endpoints configured in python.
 http://localhost:5000/
+
 http://localhost:5000/login
+
 http://localhost:5000/additem
+
 http://localhost:5000/success
+
 http://localhost:5000/category/<int:category_id>/
+
 http://localhost:5000/catalogItem/<int:catalog_id>/
+
 http://localhost:5000/editItem/<int:catalog_id>/
+
 http://localhost:5000/catalogItem/<int:catalog_id>/delete
+
 http://localhost:5000/catalog.json
+
 http://localhost:5000/gconnect
+
 http://localhost:5000/gdisconnect
 
 - / base page
