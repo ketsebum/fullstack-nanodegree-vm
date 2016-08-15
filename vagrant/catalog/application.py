@@ -63,13 +63,6 @@ def showSuccess():
       return redirect('/login')
     return render_template('success.html', username=login_session['username'])
 
-@app.route("/create")
-def newCatalogItem():
-    category = Category(name="New")
-    session.add(category)
-    session.commit()
-    return 'test'
-
 @app.route("/category/<int:category_id>/")
 def showCategoryItems(category_id):
     categories = session.query(Category).all()
