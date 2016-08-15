@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+{% block content %}
+  {% include "header.html" %}
+    <div class="container">
+      <h2>
+        Are you sure you want to delete {{item.name}}?
+        <button class="btn btn-danger delete">Submit</button>
+      </h2>
+    </div>
+    <script type="text/javascript">
+      setTimeout(function() {
+        setupDelete({{item.id}});
+      }, 1000);
+    </script>
+{% endblock %}

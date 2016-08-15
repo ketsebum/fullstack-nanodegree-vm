@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+    <div class="container">
+      <br/>
+      <h2>
+        You have Successfully deleted the item!
+      </h2>
+    </div>
+  </body>
+  <script type="text/javascript">
+  setTimeout(function() {
+    window.location.href = "/"
+  }, 5000);
+  </script>
+{% endblock %}

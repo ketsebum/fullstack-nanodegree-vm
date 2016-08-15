@@ -1,0 +1,25 @@
+{
+  "name": "node-rental",
+  "authors": [
+    "Ketse <snunleys@gmail.com>"
+  ],
+  "description": "Rental Manager",
+  "main": "index.html",
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "angular": "^1.5.7",
+    "angular-route": "^1.5.7",
+    "angular-ui-grid": "angular-grid#^3.2.1",
+    "bootstrap": "^3.3.6"
+  }
+}

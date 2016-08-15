@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//apis.google.com/js/platform.js?onload=start"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="../static/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../static/dashboard.css" rel="stylesheet">
+    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Catalog Items</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse"></div>
+        <!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <div class="container"><br/>
+      <form>
+        <fieldset disabled>
+          <h2>Local Sign In - Not Yet Implemented Please Use 3rd Part Integration</h2><br/>
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="E-Mail Address"/>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password"/>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Sign in</button>
+            <button type="submit" class="btn btn-info">Sign up</button>
+          </div><br/><br/>
+        </fieldset>
+      </form>
+      <div id="signInButton">
+        <span class="g-signin" data-scope="openid email" data-clientid="494954570899-8iqcfejgrlqq9eeu9sq9sdj577pfs64m.apps.googleusercontent.com" data-redirecturi="postmessage" data-accesstype="offline" data-cookiepolicy="single_host_origin" data-callback="signInCallback" data-approvalprompt="force"></span>
+      </div>
+    </div>
+    <!-- GOOGLE PLUS SIGN IN BUTTON-->
+    <div id="result"></div>
+    <script>
+      function signInCallback(authResult) {
+        if (authResult['code']) {
+          // Hide the sign-in button now that the user is authorized
+          $('#signinButton').attr('style', 'display: none');
+          // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+          $.ajax({
+            type: 'POST',
+            url: '/gconnect?state={{STATE}}',
+            processData: false,
+            data: authResult['code'],
+            contentType: 'application/octet-stream; charset=utf-8',
+            success: function(result) {
+              // Handle or verify the server response if necessary.
+              if (result) {
+                window.location.href = "/";
+              } else if (authResult['error']) {
+                console.log('There was an error: ' + authResult['error']);
+              } else {
+                $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+              }
+            }
+
+          });
+        }
+      }
+    </script>
+    <!--END GOOGLE PLUS SIGN IN BUTTON -->
+  </body>
+  <script src="../static/jquery/dist/jquery.js"></script>
+  <script src="../static/bootstrap/dist/js/bootstrap.min.js"></script>
+</html>

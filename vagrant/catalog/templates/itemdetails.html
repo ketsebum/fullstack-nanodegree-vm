@@ -1,0 +1,44 @@
+{% extends "main.html" %}
+{% block content %}
+  {% include "header.html" %}
+  <div class="container">
+    <div class="row">
+      <form>
+        <h2>Item Details
+          {% if user != null %}
+            {% if item.user_id == user.id %}
+              -
+              <a href="/editItem/{{item.id}}" class="btn btn-info edit">Edit</a>
+              <a href="/catalogItem/{{item.id}}/delete" class="btn btn-danger">Delete</a>
+              <br/>
+            {% endif %}
+          {% endif %}
+        </h2>
+        <fieldset disabled>
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" value="{{item.name}}"/>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" class="form-control" id="description" placeholder="Description" value="{{item.description}}"/>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select class="form-control options">
+              {% for i in categories %}
+                <option>{{i.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript">
+    setTimeout(function() {
+      selectOption("{{item.category.name}}");
+    }, 100);
+  </script>
+{% endblock %}

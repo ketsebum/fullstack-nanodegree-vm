@@ -1,0 +1,18 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Catalog Items</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      {% if username == null %}
+      <button type="button" class="pull-right btn btn-default navbar-btn btn-success">Sign in</button>
+      {% else %}
+      <div class="pull-right">
+        <button type="button" class="btn btn-default navbar-btn btn-danger logout">Log Out</button>
+        <p class="navbar-text">Signed in as <a href="#" class="navbar-link">{{username}}</a></p>
+      </div>
+      {% endif %}
+    </div>
+    <!--/.navbar-collapse -->
+  </div>
+</nav>
