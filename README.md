@@ -17,6 +17,6 @@ Configure the local timezone to UTC
 
 Install and configure Apache to serve a Python mod_wsgi application
 
-File Udacity is the public key.
+File Udacity.rsa is the public key.
 
 Install and configured PostgreSQL to not allow remote connections.
