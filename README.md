@@ -17,9 +17,4 @@ Configure the local timezone to UTC
 
 Install and configure Apache to serve a Python mod_wsgi application
 
-Install and configure PostgreSQL:
-
-Do not allow remote connections
-
-Create a new user named catalog that has limited permissions to your catalog application database
-Install git, clone and setup your Catalog App project (from your GitHub repository from earlier in the Nanodegree program) so that it functions correctly when visiting your server’s IP address in a browser. Remember to set this up appropriately so that your .git directory is not publicly accessible via a browser!
+Install and configured PostgreSQL to not allow remote connections.
